@@ -126,9 +126,9 @@ Solution parametrable en temps reel (taux de prime, seuil d'activites) sans rede
 ## Contact
 
 **Sport Data Solution** - Montpellier, France  
-Email : dataengineer@sportdatasolution.fr  
-LinkedIn : [linkedin.com/in/votre-profil](https://linkedin.com/in/votre-profil)  
-GitHub : [github.com/votre-username](https://github.com/votre-username)
+Email : ahmedchoukri3@gmail.com 
+LinkedIn : https://www.linkedin.com/in/ahmed-choukri-3b163a99
+GitHub : https://github.com/choukri063
 
 ---
 
