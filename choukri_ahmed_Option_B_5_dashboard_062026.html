@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POC Avantages Sportifs – Dashboard Officiel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #f4f6fa;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --teal: #1D9E75;
+            --teal-light: #e1f5ee;
+            --purple: #534AB7;
+            --purple-light: #eeedfe;
+            --blue: #185FA5;
+            --blue-light: #e6f1fb;
+            --amber: #BA7517;
+            --amber-light: #faeeda;
+            --red: #A32D2D;
+            --red-light: #fcebeb;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 14px;
+            padding: 0;
+        }
+        
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            height: 100vh;
+            background: #0f172a;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #1e293b;
+        }
+        
+        .sidebar-header h2 {
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .sidebar-header p {
+            font-size: 11px;
+            color: #5b6e8c;
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 10px;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            color: #94a3b8;
+            margin-bottom: 2px;
+            font-size: 13px;
+        }
+        
+        .nav-item.active {
+            background: #1e293b;
+            color: white;
+        }
+        
+        .nav-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-footer {
+            padding: 14px 20px;
+            border-top: 1px solid #1e293b;
+            font-size: 10px;
+            color: #475569;
+            line-height: 1.6;
+        }
+        
+        /* MAIN */
+        .main {
+            margin-left: 220px;
+            min-height: 100vh;
+        }
+        
+        /* TOPBAR */
+        .topbar {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .topbar-title h1 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .topbar-title p {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .badge-teal { background: var(--teal-light); color: var(--teal); }
+        .badge-red { background: var(--red-light); color: var(--red); }
+        
+        /* CONTENT */
+        .content {
+            padding: 20px 28px;
+        }
+        
+        /* ALERT */
+        .alert {
+            background: var(--red-light);
+            border-left: 4px solid var(--red);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .alert-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .alert-text strong {
+            color: var(--red);
+        }
+        
+        .alert-badge {
+            background: var(--red);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        /* KPI GRID */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        
+        .kpi-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            border-top: 3px solid;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        
+        .kpi-card.teal { border-top-color: var(--teal); }
+        .kpi-card.purple { border-top-color: var(--purple); }
+        .kpi-card.blue { border-top-color: var(--blue); }
+        .kpi-card.amber { border-top-color: var(--amber); }
+        .kpi-card.red { border-top-color: var(--red); }
+        
+        .kpi-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        
+        .kpi-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .kpi-sub {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        /* GRIDS */
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        
+        .row-3 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+        
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid var(--border);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .card-sub {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+        
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+        
+        .chart-container-sm {
+            height: 160px;
+            position: relative;
+        }
+        
+        /* PROGRESS BARS */
+        .elig-section {
+            margin-top: 16px;
+        }
+        
+        .elig-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+        
+        .progress {
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .progress-fill {
+            height: 6px;
+            border-radius: 4px;
+        }
+        
+        .progress-fill.purple { background: var(--purple); }
+        .progress-fill.teal { background: var(--teal); }
+        
+        /* TABLE */
+        .bu-table {
+            width: 100%;
+            font-size: 12px;
+            border-collapse: collapse;
+        }
+        
+        .bu-table th {
+            text-align: left;
+            padding: 8px 8px 8px 0;
+            color: var(--text-light);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .bu-table td {
+            padding: 8px 8px 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .bu-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 4px;
+            height: 5px;
+            width: 80px;
+        }
+        
+        .progress-fill-sm {
+            height: 5px;
+            border-radius: 4px;
+        }
+        
+        /* ANOMALIES */
+        .anomaly-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        
+        .anomaly-item {
+            background: var(--red-light);
+            border-left: 3px solid var(--red);
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .anomaly-name {
+            font-weight: 600;
+            min-width: 140px;
+        }
+        
+        .anomaly-mode {
+            color: var(--text-light);
+            min-width: 140px;
+        }
+        
+        .anomaly-tag {
+            background: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--red);
+        }
+        
+        /* FINANCIAL */
+        .fin-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 16px;
+        }
+        
+        .fin-card {
+            padding: 14px;
+            border-radius: 10px;
+        }
+        
+        .fin-card.teal { background: var(--teal-light); }
+        .fin-card.blue { background: var(--blue-light); }
+        .fin-card.amber { background: var(--amber-light); }
+        .fin-card.gray { background: #f1f5f9; }
+        
+        .fin-label {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .fin-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .fin-sub {
+            font-size: 10px;
+            margin-top: 4px;
+            color: var(--text-light);
+        }
+        
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-light);
+            font-size: 11px;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .row-2, .row-3 { grid-template-columns: 1fr; }
+            .fin-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h2>🏃 Sport Data</h2>
+        <p>POC Avantages Sportifs</p>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-item active">
+            <span class="dot" style="background:#1D9E75;"></span>
+            Vue d'ensemble
+        </div>
+        <div class="nav-item">
+            <span class="dot" style="background:#534AB7;"></span>
+            Prime sportive
+        </div>
+        <div class="nav-item">
+            <span class="dot" style="background:#185FA5;"></span>
+            Jours bien-être
+        </div>
+        <div class="nav-item">
+            <span class="dot" style="background:#BA7517;"></span>
+            Activités Strava
+        </div>
+        <div class="nav-item">
+            <span class="dot" style="background:#A32D2D;"></span>
+            Anomalies (9)
+        </div>
+    </div>
+    <div class="sidebar-footer">
+        Dernier run: 16/06/2026<br>
+        3 592 activités · 161 salariés
+    </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-title">
+            <h1>🏃 Vue d'ensemble – Avantages sportifs</h1>
+            <p>161 salariés · données simulées 12 mois · Lattes, 34970</p>
+        </div>
+        <div>
+            <span class="badge badge-teal">🔴 9 anomalies</span>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- ALERTE ANOMALIES -->
+        <div class="alert">
+            <div class="alert-text">
+                <strong>⚠️ 9 anomalies détectées</strong>
+                <span style="font-size:12px;color:#64748b;">Salariés déclarant un mode vélo/trottinette mais adresse non géocodable</span>
+            </div>
+            <span class="alert-badge">9 à traiter</span>
+        </div>
+
+        <!-- KPI ROW -->
+        <div class="kpi-grid">
+            <div class="kpi-card teal">
+                <div class="kpi-label">Effectif total</div>
+                <div class="kpi-value">161</div>
+                <div class="kpi-sub">5 Business Units</div>
+            </div>
+            <div class="kpi-card purple">
+                <div class="kpi-label">Éligibles prime</div>
+                <div class="kpi-value">59</div>
+                <div class="kpi-sub"><span class="badge badge-teal">37%</span> de l'effectif</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-label">Coût primes</div>
+                <div class="kpi-value">148 848 €</div>
+                <div class="kpi-sub">moy. 2 522 €/an</div>
+            </div>
+            <div class="kpi-card amber">
+                <div class="kpi-label">Éligibles bien-être</div>
+                <div class="kpi-value">83</div>
+                <div class="kpi-sub"><span class="badge badge-teal">52%</span> de l'effectif</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-label">Coût total</div>
+                <div class="kpi-value">244 843 €</div>
+                <div class="kpi-sub">415 jours bien-être</div>
+            </div>
+        </div>
+
+        <!-- LIGNE 1 : ACTIVITÉS + TRANSPORT -->
+        <div class="row-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">📈 Activités sportives par mois</div>
+                        <div class="card-sub">12 mois glissants · 3 592 activités totales</div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="monthChart"></canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">🚲 Modes de déplacement</div>
+                        <div class="card-sub">161 salariés</div>
+                    </div>
+                </div>
+                <div class="chart-container-sm"><canvas id="transportChart"></canvas></div>
+                <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px;">
+                    <span style="font-size:11px;"><span style="display:inline-block;width:10px;height:10px;background:#888780;border-radius:50%;"></span> Véhicule 73</span>
+                    <span style="font-size:11px;"><span style="display:inline-block;width:10px;height:10px;background:#1D9E75;border-radius:50%;"></span> Vélo 54</span>
+                    <span style="font-size:11px;"><span style="display:inline-block;width:10px;height:10px;background:#378ADD;border-radius:50%;"></span> TC 20</span>
+                    <span style="font-size:11px;"><span style="display:inline-block;width:10px;height:10px;background:#7F77DD;border-radius:50%;"></span> Marche 14</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIGNE 2 : TOP SPORTS + ÉLIGIBILITÉ -->
+        <div class="row-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">🏆 Top 10 sports pratiqués</div>
+                        <div class="card-sub">Nombre d'activités sur 12 mois</div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="sportsChart"></canvas></div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">📊 Éligibilité par avantage</div>
+                        <div class="card-sub">Sur 161 salariés</div>
+                    </div>
+                </div>
+                <div class="chart-container"><canvas id="eligChart"></canvas></div>
+                <div class="elig-section">
+                    <div class="elig-item">
+                        <span>Prime sportive</span>
+                        <span><strong>59</strong> / 161</span>
+                    </div>
+                    <div class="progress"><div class="progress-fill purple" style="width:37%;"></div></div>
+                    <div class="elig-item" style="margin-top:10px;">
+                        <span>Jours bien-être</span>
+                        <span><strong>83</strong> / 161</span>
+                    </div>
+                    <div class="progress"><div class="progress-fill teal" style="width:52%;"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIGNE 3 : BU + ANOMALIES -->
+        <div class="row-2">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">🏢 Répartition par Business Unit</div>
+                        <div class="card-sub">Éligibilité prime par département</div>
+                    </div>
+                </div>
+                <table class="bu-table">
+                    <thead>
+                        <tr><th>BU</th><th>Effectif</th><th>Éligibles</th><th>Taux</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Finance</td><td>42</td><td>17</td><td><div class="progress-bar"><div class="progress-fill-sm" style="width:40%;background:#1D9E75;"></div></div> 40%</td></tr>
+                        <tr><td>Marketing</td><td>25</td><td>8</td><td><div class="progress-bar"><div class="progress-fill-sm" style="width:32%;background:#534AB7;"></div></div> 32%</td></tr>
+                        <tr><td>R&D</td><td>26</td><td>5</td><td><div class="progress-bar"><div class="progress-fill-sm" style="width:19%;background:#185FA5;"></div></div> 19%</td></tr>
+                        <tr><td>Support</td><td>35</td><td>14</td><td><div class="progress-bar"><div class="progress-fill-sm" style="width:40%;background:#BA7517;"></div></div> 40%</td></tr>
+                        <tr><td>Ventes</td><td>33</td><td>15</td><td><div class="progress-bar"><div class="progress-fill-sm" style="width:45%;background:#1D9E75;"></div></div> 45%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- LISTE ANOMALIES -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">🚨 Liste des 9 anomalies</div>
+                        <div class="card-sub">Salariés avec mode vélo/trottinette non géocodé</div>
+                    </div>
+                    <span class="badge badge-red">9 à traiter</span>
+                </div>
+                <div class="anomaly-list">
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Michelle Gauthier</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Claudine Joubert</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Julien Ferrand</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Roger Henry</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Bernard Georges</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Hugues Grenier</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Gilles Baudry</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Simone Gosselin</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                    <div class="anomaly-item">
+                        <span class="anomaly-name">Henri Pineau</span>
+                        <span class="anomaly-mode">Vélo/Trottinette</span>
+                        <span class="anomaly-tag">Distance n/d</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IMPACT FINANCIER -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">💰 Impact financier consolidé</div>
+                    <div class="card-sub">Données réelles du POC</div>
+                </div>
+            </div>
+            <div class="fin-grid">
+                <div class="fin-card teal">
+                    <div class="fin-label">PRIMES SPORTIVES</div>
+                    <div class="fin-value">148 848 €</div>
+                    <div class="fin-sub">59 salariés × 5% salaire</div>
+                </div>
+                <div class="fin-card blue">
+                    <div class="fin-label">JOURS BIEN-ÊTRE</div>
+                    <div class="fin-value">95 995 €</div>
+                    <div class="fin-sub">415 jours × 231 €/jour</div>
+                </div>
+                <div class="fin-card amber">
+                    <div class="fin-label">COÛT TOTAL</div>
+                    <div class="fin-value">244 843 €</div>
+                    <div class="fin-sub">Primes + jours bien-être</div>
+                </div>
+                <div class="fin-card gray">
+                    <div class="fin-label">COÛT PAR SALARIÉ</div>
+                    <div class="fin-value">1 520 €</div>
+                    <div class="fin-sub">Moyenne sur l'effectif</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROI -->
+        <div class="card" style="background: #f8fafc;">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">📈 Retour sur investissement (ROI)</div>
+                    <div class="card-sub">Hypothèses de bénéfices</div>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                <div style="text-align:center;padding:12px;background:white;border-radius:8px;">
+                    <div style="font-size:11px;color:#64748b;">RÉDUCTION ABSENTÉISME</div>
+                    <div style="font-size:18px;font-weight:700;color:#1D9E75;">73 453 €</div>
+                    <div style="font-size:10px;color:#64748b;">-30% d'absentéisme</div>
+                </div>
+                <div style="text-align:center;padding:12px;background:white;border-radius:8px;">
+                    <div style="font-size:11px;color:#64748b;">GAIN PRODUCTIVITÉ</div>
+                    <div style="font-size:18px;font-weight:700;color:#534AB7;">110 180 €</div>
+                    <div style="font-size:10px;color:#64748b;">+45% productivité</div>
+                </div>
+                <div style="text-align:center;padding:12px;background:white;border-radius:8px;">
+                    <div style="font-size:11px;color:#64748b;">ATTRACTION TALENTS</div>
+                    <div style="font-size:18px;font-weight:700;color:#185FA5;">35 000 €</div>
+                    <div style="font-size:10px;color:#64748b;">Économie recrutement</div>
+                </div>
+                <div style="text-align:center;padding:12px;background:white;border-radius:8px;border:2px solid #1D9E75;">
+                    <div style="font-size:11px;color:#64748b;">TOTAL BÉNÉFICES</div>
+                    <div style="font-size:20px;font-weight:700;color:#1D9E75;">218 633 €</div>
+                    <div style="font-size:10px;color:#64748b;"><span style="color:#A32D2D;">⚠️ ROI: -10,7%</span></div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:14px;font-size:12px;color:#64748b;">
+                ⏱️ Retour sur investissement estimé : <strong style="color:#A32D2D;">13,4 mois</strong>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            🏃 Sport Data Solution - POC Avantages Sportifs | Dernière mise à jour: 16/06/2026 | 3 592 activités
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    // DONNÉES RÉELLES DU POC
+    // ================================================================
+    const DATA = {
+        monthlyLabels: ['Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc', 'Jan', 'Fév', 'Mar', 'Avr', 'Mai'],
+        monthlyData: [298, 312, 305, 290, 310, 285, 278, 305, 295, 310, 300, 304],
+        transportLabels: ['Véhicule', 'Vélo/Trottinette', 'Transports', 'Marche/Running'],
+        transportData: [73, 54, 20, 14],
+        sportLabels: ['Course à pied', 'Vélo', 'Natation', 'Randonnée', 'Tennis', 'Football', 'Musculation', 'Yoga', 'Badminton', 'Running'],
+        sportData: [892, 684, 445, 398, 312, 278, 245, 198, 156, 104]
+    };
+
+    // ================================================================
+    // CHART: Activités par mois
+    // ================================================================
+    new Chart(document.getElementById('monthChart'), {
+        type: 'bar',
+        data: {
+            labels: DATA.monthlyLabels,
+            datasets: [{
+                data: DATA.monthlyData,
+                backgroundColor: '#1D9E75',
+                borderRadius: 4,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#f0f2f5' }, beginAtZero: true },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+
+    // ================================================================
+    // CHART: Modes de transport
+    // ================================================================
+    new Chart(document.getElementById('transportChart'), {
+        type: 'doughnut',
+        data: {
+            labels: DATA.transportLabels,
+            datasets: [{
+                data: DATA.transportData,
+                backgroundColor: ['#888780', '#1D9E75', '#378ADD', '#7F77DD'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            cutout: '68%'
+        }
+    });
+
+    // ================================================================
+    // CHART: Top sports
+    // ================================================================
+    new Chart(document.getElementById('sportsChart'), {
+        type: 'bar',
+        data: {
+            labels: DATA.sportLabels,
+            datasets: [{
+                data: DATA.sportData,
+                backgroundColor: '#534AB7',
+                borderRadius: 4,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: '#f0f2f5' } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+
+    // ================================================================
+    // CHART: Éligibilité
+    // ================================================================
+    new Chart(document.getElementById('eligChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Éligibles prime', 'Non éligibles prime', 'Éligibles bien-être', 'Non éligibles bien-être'],
+            datasets: [
+                {
+                    data: [59, 102],
+                    backgroundColor: ['#534AB7', '#eeedfe'],
+                    borderWidth: 0,
+                    cutout: '70%'
+                },
+                {
+                    data: [83, 78],
+                    backgroundColor: ['#1D9E75', '#e1f5ee'],
+                    borderWidth: 0,
+                    cutout: '55%'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } }
+        }
+    });
+</script>
+
+</body>
+</html>

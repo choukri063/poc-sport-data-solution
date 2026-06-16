@@ -1,0 +1,195 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2">
+  <diagram name="Architecture Pipeline ETL Sport Data Solution" id="architecture-pipeline">
+    <mxGraphModel dx="1042" dy="634" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Sources de donnees" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;startSize=20;fontColor=#5F5E5A;" parent="1" vertex="1">
+          <mxGeometry x="40" y="40" width="900" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="CgUY3VxKpmXxzFSzfiYY-41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Fichier RH Donnees-RH.xlsx 161 salaries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontStyle=1;fontColor=#444441;" parent="1" vertex="1">
+          <mxGeometry x="60" y="75" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Declarations sportives Donnees-Sportive.xlsx Sports declares" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontStyle=1;fontColor=#444441;" parent="1" vertex="1">
+          <mxGeometry x="230" y="75" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Activites Strava (simule) strava_activities.csv 3 592 activites / 12 mois" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontStyle=1;fontColor=#444441;" parent="1" vertex="1">
+          <mxGeometry x="410" y="75" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="Cache codes postaux Coordonnees GPS + Haversine Validation distances" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontStyle=1;fontColor=#444441;" parent="1" vertex="1">
+          <mxGeometry x="600" y="75" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="API Nominatim (test) Geocodage adresses OpenStreetMap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;fontStyle=1;fontColor=#444441;" parent="1" vertex="1">
+          <mxGeometry x="790" y="75" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="3" target="12" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="4" target="12" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="203" />
+              <mxPoint x="490" y="203" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="5" target="12" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="6" target="13" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="160" />
+              <mxPoint x="280" y="160" />
+              <mxPoint x="280" y="270" />
+              <mxPoint x="130" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="airflow_zone" value="Orchestration - Apache Airflow" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#D97706;startSize=20;fontColor=#D97706;" parent="1" vertex="1">
+          <mxGeometry x="40" y="170" width="900" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="af_box" value="DAG poc_avantages_sportifs Execution quotidienne 6h Monitoring + Alertes email" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#D97706;fontStyle=1;fontColor=#B45309;" parent="1" vertex="1">
+          <mxGeometry x="60" y="205" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="Pipeline ETL Python (Pandas)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;startSize=20;fontColor=#534AB7;" parent="1" vertex="1">
+          <mxGeometry x="40" y="280" width="900" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="Extract Lecture Excel + CSV Geocodage distances" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontStyle=1;fontColor=#3C3489;" parent="1" vertex="1">
+          <mxGeometry x="60" y="315" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="Transform Validation distances Calcul eligibilite prime + bien-etre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontStyle=1;fontColor=#3C3489;" parent="1" vertex="1">
+          <mxGeometry x="260" y="315" width="180" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="Load Ecriture SQLite 3 tables + logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontStyle=1;fontColor=#3C3489;" parent="1" vertex="1">
+          <mxGeometry x="500" y="315" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="13" target="14" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="14" target="15" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="Tests qualite (Great Expectations style) 22 tests automatises - 3 tables Unicite | Positivite | Referentiel | Coherence metier" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontStyle=1;align=center;fontColor=#085041;" parent="1" vertex="1">
+          <mxGeometry x="240" y="420" width="400" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="14" target="18" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="400" />
+              <mxPoint x="440" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="18" target="15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="510" y="390" />
+              <mxPoint x="570" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="21" value="Stockage - SQLite (PostgreSQL en production)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;startSize=20;fontColor=#185FA5;" parent="1" vertex="1">
+          <mxGeometry x="40" y="500" width="900" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="Table salaries 161 salaries RH + distance + validation + prime" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontStyle=1;fontColor=#0C447C;" parent="1" vertex="1">
+          <mxGeometry x="60" y="540" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="Table activites 3 592 activites 9 types de sport" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontStyle=1;fontColor=#0C447C;" parent="1" vertex="1">
+          <mxGeometry x="240" y="540" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="Table avantages 59 eligibles prime 111 eligibles bien-etre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontStyle=1;fontColor=#0C447C;" parent="1" vertex="1">
+          <mxGeometry x="420" y="540" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="Table logs Monitoring pipeline Historique executions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;fontStyle=1;fontColor=#0C447C;" parent="1" vertex="1">
+          <mxGeometry x="610" y="540" width="150" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="15" target="21" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="343" />
+              <mxPoint x="740" y="480" />
+              <mxPoint x="490" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="27" value="Restitution" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;startSize=20;fontColor=#0F6E56;" parent="1" vertex="1">
+          <mxGeometry x="40" y="640" width="900" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="Dashboard Streamlit KPI interactifs Filtres dynamiques" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontStyle=1;fontColor=#085041;" parent="1" vertex="1">
+          <mxGeometry x="80" y="675" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="Notifications Slack Messages automatiques Webhook" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontStyle=1;fontColor=#085041;" parent="1" vertex="1">
+          <mxGeometry x="320" y="675" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="Alertes email Anomalies &gt; 10 Verification requise" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontStyle=1;fontColor=#085041;" parent="1" vertex="1">
+          <mxGeometry x="560" y="675" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="Export CSV validation_complete.csv salaries_eligibles.csv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontStyle=1;fontColor=#085041;" parent="1" vertex="1">
+          <mxGeometry x="760" y="675" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="22" target="28" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="23" target="29" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="24" target="30" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#888780;strokeWidth=1.5;" parent="1" source="25" target="31" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="Legende" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;startSize=20;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="980" y="40" width="220" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="37_70" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1EFE8;strokeColor=#5F5E5A;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="70" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_70" value="Sources de donnees" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="70" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37_100" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;strokeColor=#D97706;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="100" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_100" value="Orchestration Airflow" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="100" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37_130" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="130" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_130" value="Pipeline ETL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="130" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37_160" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="160" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_160" value="Tests qualite" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="160" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37_190" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F1FB;strokeColor=#185FA5;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="190" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_190" value="Stockage SQLite" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="190" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37_220" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;" parent="1" vertex="1">
+          <mxGeometry x="1000" y="220" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="38_220" value="Restitution" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#3D3D3A;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="220" width="140" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="Architecture modulaire : SQLite -&gt; PostgreSQL en production Simulation Strava -&gt; API OAuth2 en phase 2" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#888780;fontStyle=2;" parent="1" vertex="1">
+          <mxGeometry x="980" y="320" width="220" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
